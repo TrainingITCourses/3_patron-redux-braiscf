@@ -1,0 +1,6 @@
+<p>
+  <span *ngIf="counter.length>0; else noData">
+  {{ counter.length }}
+  {{ counter.message }}</span>
+  <ng-template #noData>Sin datos</ng-template>
+</p>

@@ -1,0 +1,17 @@
+<section>
+<tr *ngFor="let entry of arrCriterioBusqueda">
+    <td>{{ entry.text }}</td>
+    <td>
+        <input type="radio" name="radiogroup"
+            [value]="entry.key"
+            (change)="onRadioButtonChange(entry)">
+    </td>
+</tr>
+
+</section>
+<tr>
+  <select #selectFilter (change)="search.next({criterioName: criterioName, criterioValue: $event.target.value})">
+    <option value="">---Selecciona---</option>
+    <option *ngFor="let elemento of elementosCombo" [value]="elemento.id">{{elemento.name}}</option>
+  </select>
+</tr>

@@ -1,0 +1,12 @@
+
+      <h1 class="mat-h1">
+        Explore the rockets library.
+      </h1>
+        <app-search-filter (search)="onSearch($event)">
+          </app-search-filter>
+
+  <span *ngIf="filteredLaunches">
+    <app-counter [counter]="{length:filteredLaunches.length, message:'Lanzamientos'}"></app-counter>
+    <app-launches-list [launches]="filteredLaunches"></app-launches-list>
+  </span>
+
