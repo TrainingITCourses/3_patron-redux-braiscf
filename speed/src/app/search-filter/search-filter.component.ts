@@ -40,10 +40,6 @@ export class SearchFilterComponent implements OnInit {
       .subscribe(agencies => (this.agencies = agencies));
 
    this.global
-      .select$(GlobalSlideTypes.types)
-      .subscribe(types => (this.types = types));
-
-   this.global
       .select$(GlobalSlideTypes.launches)
       .subscribe(launches => (this.launches = launches));
   }
@@ -62,6 +58,7 @@ export class SearchFilterComponent implements OnInit {
         this.criterioName = this.arrCriterioBusqueda[1].text;
         break;
       case 3:
+        this.types = this.global.selectSnapShot(GlobalSlideTypes.types);
         this.elementosCombo = this.types;
         this.criterioName = this.arrCriterioBusqueda[2].text;
         break;
