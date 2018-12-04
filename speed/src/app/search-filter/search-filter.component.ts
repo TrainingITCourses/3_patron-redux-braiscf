@@ -1,9 +1,12 @@
+import { StatusesState } from './../reducers/status/status.reducer';
 import { Launch } from './../store/models/launch';
 import { Agency } from './../store/models/agency';
 import { Status } from './../store/models/status';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ApiService } from '../store/api.service';
 import { GlobalSlideTypes, GlobalStore } from '../store/global-store.state';
+import { Store } from '@ngrx/store';
+import { State } from '../reducers';
 
 
 @Component({
@@ -13,16 +16,16 @@ import { GlobalSlideTypes, GlobalStore } from '../store/global-store.state';
 })
 export class SearchFilterComponent implements OnInit {
   @Output() public search = new EventEmitter<string>();
-  public statuses: Status[];
-  public agencies: Agency[];
-  public types: any[];
-  public launches: Launch[];
+  public statuses;
+  public agencies;
+  public types;
+  public launches;
   public arrCriterioBusqueda: any[];
   public elementosCombo: any[];
   public criterioName: string;
 
 
-  constructor(private global: GlobalStore) {}
+  constructor(private store: Store<State>) {}
 
   ngOnInit() {
     this.arrCriterioBusqueda = [
@@ -31,17 +34,21 @@ export class SearchFilterComponent implements OnInit {
       {key: 3, text: 'Tipo'}
   ];
 
-   this.global
-    .select$(GlobalSlideTypes.statuses)
-    .subscribe(statuses => (this.statuses = statuses));
+   this.store
+    .select('status')
+    .subscribe(statusesState => (this.statuses = statusesState.statuses));
 
-   this.global
-      .select$(GlobalSlideTypes.agencies)
-      .subscribe(agencies => (this.agencies = agencies));
+   this.store
+      .select('agency')
+      .subscribe(agenciesState => (this.agencies = agenciesState.agencies));
 
-   this.global
-      .select$(GlobalSlideTypes.launches)
-      .subscribe(launches => (this.launches = launches));
+   this.store
+      .select('launch')
+      .subscribe(launchesState => (this.launches = launchesState.launches));
+
+    this.store
+      .select('type')
+      .subscribe(typesState => (this.types = typesState.types));
   }
 
 
@@ -58,7 +65,6 @@ export class SearchFilterComponent implements OnInit {
         this.criterioName = this.arrCriterioBusqueda[1].text;
         break;
       case 3:
-        this.types = this.global.selectSnapShot(GlobalSlideTypes.types);
         this.elementosCombo = this.types;
         this.criterioName = this.arrCriterioBusqueda[2].text;
         break;

@@ -7,6 +7,8 @@ import { Status } from './models/status';
 import { Agency } from './models/agency';
 import { LoadLaunches, LoadStatuses, LoadTypes, LoadAgencies } from './global-store.actions';
 import { GlobalStore } from './global-store.state';
+import { Store } from '@ngrx/store';
+import { State } from '../reducers';
 
 @Injectable({
   providedIn: 'root'
@@ -14,37 +16,30 @@ import { GlobalStore } from './global-store.state';
 export class ApiService {
   public launches: Launch[];
   private key = 'launches';
-  constructor(private http: HttpClient, private global: GlobalStore) {
+  constructor(private http: HttpClient, private store: Store<State>) {
 
   }
 
   /** GET Launch List */
-  public getLaunchList = () => {
+  public getLaunchList = (): Observable<any[]> =>
      this.http.get<any[]>('../assets/data/launches.json')
       .pipe(map((res: any) => res.launches), tap(res => (this.launches = res)))
-      .subscribe(launches => this.global.dispatch(new LoadLaunches(launches)));
-  }
 
 
   /** GET Status List */
-  public getStatusList = () => {
+  public getStatusList = (): Observable<any[]> =>
       this.http.get<Status[]>('../assets/data/launchstatus.json')
       .pipe(map((res: any) => res.types))
-      .subscribe(statuses => this.global.dispatch(new LoadStatuses(statuses)));
-  }
+
 
   /** GET Agency List  */
-  public getAgencyList = () => {
+  public getAgencyList = (): Observable<any[]> =>
     this.http.get<Agency[]>('../assets/data/agencies.json')
       .pipe(map((res: any) => res.agencies))
-      .subscribe(agencies => this.global.dispatch(new LoadAgencies(agencies)));
-  }
+
 
   /** GET Type List  */
-  public getTypeList = () => {
+  public getTypeList = (): Observable<any[]> =>
     this.http.get<any[]>('../assets/data/missiontypes.json')
       .pipe(map((res: any) => res.types))
-      .subscribe(types => this.global.dispatch(new LoadTypes(types)));
-  }
-
 }
